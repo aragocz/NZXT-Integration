@@ -1,0 +1,2 @@
+# NZXT Integration
+This is just a web integration for the NZXT Kraken I made for fun. This package itself uses express.js for serving the webpage, if you want to host it using any other service feel free to grab just the contents of public folder, as nothing there uses express API.
