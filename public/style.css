@@ -33,6 +33,7 @@
         margin: 2.5%;
         width: 95%;
         animation: 2s infinite alternate heartbeat;
+        transition: 0.3s;
     }
 
     #dat {

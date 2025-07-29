@@ -8,23 +8,24 @@ class Gradient{
     }
 
     getColor(percentage) {
-        if(this.colormatrix[0].float > percentage) return this.colormatrix[0].color.join("");
-        if(this.colormatrix[this.colormatrix.length-1].float < percentage) return this.colormatrix[this.colormatrix.length-1].color.join("");
+        const shortpercentage = parseFloat(percentage.toFixed(2));
+        if(this.colormatrix[0].float > shortpercentage) return "#"+this.colormatrix[0].color.join("");
+        if(this.colormatrix[this.colormatrix.length-1].float < shortpercentage) return "#"+this.colormatrix[this.colormatrix.length-1].color.join("");
         
         let temp = this.colormatrix.map(({float}) => float);
 
-        if(temp.includes(percentage)) return this.colormatrix[temp.indexOf(percentage)].color.join("");
+        if(temp.includes(shortpercentage)) return "#"+this.colormatrix[temp.indexOf(shortpercentage)].color.join("");
 
-        temp = temp.map(n => parseFloat((n-percentage).toFixed(2)));
+        temp = temp.map(n => parseFloat((n-shortpercentage).toFixed(2)));
         
-        const smaller = this.colormatrix[temp.indexOf(Math.max(...temp.filter(n => n < 0)))];
-        const higher = this.colormatrix[temp.indexOf(Math.min(...temp.filter(n => n > 0)))];    
+        const lower = this.colormatrix[temp.indexOf(Math.max(...temp.filter(n => n < 0)))];
+        const higher = this.colormatrix[temp.indexOf(Math.min(...temp.filter(n => n > 0)))];
 
-        const mixperc = parseFloat(((percentage-smaller.float)/(higher.float-smaller.float)).toFixed(2));
+        const mixperc = parseFloat(((shortpercentage-lower.float)/(higher.float-lower.float)).toFixed(2));
 
-        const mixin = [Math.round(Math.abs(parseInt(smaller.color[0], 16)-parseInt(higher.color[0], 16))*mixperc), Math.round(Math.abs(parseInt(smaller.color[1], 16)-parseInt(higher.color[1], 16))*mixperc), Math.round(Math.abs(parseInt(smaller.color[2], 16)-parseInt(higher.color[2], 16))*mixperc)]
+        const mixin = [Math.round(Math.abs(parseInt(lower.color[0], 16)-parseInt(higher.color[0], 16))*mixperc), Math.round(Math.abs(parseInt(lower.color[1], 16)-parseInt(higher.color[1], 16))*mixperc), Math.round(Math.abs(parseInt(lower.color[2], 16)-parseInt(higher.color[2], 16))*mixperc)]
 
-        return "#"+[(parseInt(smaller.color[0], 16) > higher.color[0] ? parseInt(smaller.color[0], 16) - mixin[0] : parseInt(smaller.color[0], 16) + mixin[0]).toString(16), (parseInt(smaller.color[1], 16) > higher.color[1] ? parseInt(smaller.color[1], 16) - mixin[1] : parseInt(smaller.color[1], 16) + mixin[1]).toString(16), (parseInt(smaller.color[2], 16) > higher.color[2] ? parseInt(smaller.color[2], 16) - mixin[2] : parseInt(smaller.color[2], 16) + mixin[2]).toString(16)].join("")
+        return "#"+[(parseInt(lower.color[0], 16) > higher.color[0] ? parseInt(lower.color[0], 16) - mixin[0] : parseInt(lower.color[0], 16) + mixin[0]).toString(16), (parseInt(lower.color[1], 16) > higher.color[1] ? parseInt(lower.color[1], 16) - mixin[1] : parseInt(lower.color[1], 16) + mixin[1]).toString(16), (parseInt(lower.color[2], 16) > higher.color[2] ? parseInt(lower.color[2], 16) - mixin[2] : parseInt(lower.color[2], 16) + mixin[2]).toString(16)].map(n => n.length < 2 ? "0"+n : n).join("")
     }
 }
 
